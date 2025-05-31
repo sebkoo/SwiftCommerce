@@ -1,0 +1,15 @@
+[
+  {
+    "id": "A1B2C3D4-E5F6-7890-1234-56789ABCDEF0",
+    "name": "Swift Sneakers",
+    "price": 89.99,
+    "imageURL": "https://example.com/sneakers.jpg"
+  },
+  {
+    "id": "12345678-90AB-CDEF-1234-567890ABCDEF",
+    "name": "iOS Hoodie",
+    "price": 59.99,
+    "imageURL": "https://example.com/hoodie.jpg"
+  }
+]
+

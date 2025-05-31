@@ -25,3 +25,13 @@ final class ProductListViewModel: ObservableObject {
         }
     }
 }
+
+extension ProductListViewModel {
+    static var previews: ProductListViewModel {
+        let viewModel = ProductListViewModel(service: MockProductService())
+        Task {
+            await viewModel.fetchProducts()
+        }
+        return viewModel
+    }
+}

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductListView: View {
-    @StateObject private var viewModel = ProductListViewModel(service: MockProductService())
+    @StateObject var viewModel: ProductListViewModel
 
     var body: some View {
         List(viewModel.products) { product in
@@ -27,5 +27,7 @@ struct ProductListView: View {
 }
 
 #Preview {
-    ProductListView()
+    NavigationStack {
+        ProductListView(viewModel: .previews)
+    }
 }
