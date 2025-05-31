@@ -9,7 +9,9 @@ import SwiftUI
 
 struct CartView: View {
     @EnvironmentObject var cart: CartManager    // shared instance
-    @State private var showingConfirmation = false
+    @State private var showConfirm = false
+    @State private var showSummary = false
+    @State private var lastPurchased: [Product] = []
 
     var body: some View {
         VStack {
@@ -45,7 +47,7 @@ struct CartView: View {
                     }
 
                     Button("Checkout") {
-                        showingConfirmation = true
+                        showConfirm = true
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
@@ -56,13 +58,21 @@ struct CartView: View {
             }
         }
         .navigationTitle("Cart")
-        .alert("Confirm Purchase", isPresented: $showingConfirmation) {
+        .alert("Confirm Purchase", isPresented: $showConfirm) {
             Button("Confirm", role: .destructive) {
+                lastPurchased = cart.items
                 cart.clearCart()
+                showSummary = true
             }
             Button("Cancel", role: .cancel) { }
         } message: {
             Text("Are you sure you want to place this order?")
+        }
+        .navigationDestination(isPresented: $showSummary) {
+            OrderSummaryView(
+                items: lastPurchased,
+                totalPrice: lastPurchased.reduce(0) { $0 + $1.price }
+            )
         }
     }
 }
