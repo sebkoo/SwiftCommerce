@@ -18,8 +18,7 @@ struct SwiftCommerceApp: App {
                     ProductListView(
                         viewModel: ProductListViewModel(
                             service: RealProductService()
-                        ),
-                        cart: CartManager()
+                        )
                     )
                 }
                 .tabItem {
@@ -27,13 +26,14 @@ struct SwiftCommerceApp: App {
                 }
 
                 NavigationStack {
-                    CartView(cart: cart)
+                    CartView()
                 }
                 .tabItem {
                     Label("Cart", systemImage: "cart")
                 }
+                .badge(cart.totalItems)
             }
-
+            .environmentObject(cart)    // Make CartManager globally accessible
         }
     }
 }

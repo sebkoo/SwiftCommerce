@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CartView: View {
-    @ObservedObject var cart: CartManager
+    @EnvironmentObject var cart: CartManager    // shared instance
 
     var body: some View {
         VStack {
@@ -49,15 +49,17 @@ struct CartView: View {
 }
 
 #Preview {
-    let cart = CartManager()
-    cart.addToCart(Product(
-        id: UUID(),
-        name: "Preview Hat",
-        price: 29.99,
-        imageURL: URL(string: "https://example.com/hat.jpg")!
-    ))
-
-    return NavigationStack {
-        CartView(cart: cart)
+    NavigationStack {
+        CartView()
+            .environmentObject({
+                let mockCart = CartManager()
+                mockCart.addToCart(Product(
+                    id: UUID(),
+                    name: "Preview Hat",
+                    price: 29.99,
+                    imageURL: URL(string: "https://example.com/hat.jpg")!
+                ))
+                return mockCart
+            }())
     }
 }
