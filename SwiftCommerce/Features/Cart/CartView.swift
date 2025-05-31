@@ -20,6 +20,9 @@ struct CartView: View {
                         .foregroundColor(.secondary)
                 }
             }
+            .onDelete { indexSet in
+                cart.remove(atOffsets: indexSet)
+            }
 
             if cart.items.isEmpty {
                 Text("Your cart is empty.")
