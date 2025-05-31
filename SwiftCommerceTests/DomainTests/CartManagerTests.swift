@@ -27,7 +27,9 @@ final class CartManagerTests: XCTestCase {
     }
 
     func testClearCartRemovesAllItems() async {
-        let cart = CartManager()
+        let cart = makeIsolatedCartManager()
+        cart.clearCart()
+
         let product = Product(
             id: UUID(),
             name: "Another Product",
@@ -44,7 +46,9 @@ final class CartManagerTests: XCTestCase {
     }
 
     func testRemoveItemAtIndex() async {
-        let cart = CartManager()
+        let cart = makeIsolatedCartManager()
+        cart.clearCart()
+        
         let product1 = Product(id: UUID(), name: "Item 1", price: 5,  imageURL: URL(string: "https://a.com")!)
         let product2 = Product(id: UUID(), name: "Item 2", price: 10, imageURL: URL(string: "https://b.com")!)
 
@@ -58,7 +62,9 @@ final class CartManagerTests: XCTestCase {
     }
 
     func testTotalPriceReflectsAllItems() async {
-        let cart = CartManager()
+        let cart = makeIsolatedCartManager()
+        cart.clearCart()
+
         let product1 = Product(id: UUID(), name: "Shoe", price: 50, imageURL: URL(string: "https://1.com")!)
         let product2 = Product(id: UUID(), name: "Hat",  price: 25, imageURL: URL(string: "https://2.com")!)
 
@@ -66,5 +72,31 @@ final class CartManagerTests: XCTestCase {
         cart.addToCart(product2)
 
         XCTAssertEqual(cart.totalPrice, 75)
+    }
+
+    func testCartPersistsToUserDefaults() async {
+        let cart = CartManager()
+        cart.clearCart()    // clean before test
+
+        let product = Product(
+            id: UUID(),
+            name: "Test Watch",
+            price: 349,
+            imageURL: URL(string: "https://example.com/watch.jpg")!
+        )
+        cart.addToCart(product)
+
+        let restoredCart = CartManager()    // will load from UserDefaults
+        XCTAssertEqual(restoredCart.items.count, 1)
+        XCTAssertEqual(restoredCart.items.first?.name, "Test Watch")
+    }
+}
+
+extension CartManagerTests {
+    func makeIsolatedCartManager() -> CartManager {
+        let suiteName = "TestDefaults-\(UUID().uuidString)"
+        let testDefaults = UserDefaults(suiteName: suiteName)!
+        testDefaults.removePersistentDomain(forName: suiteName)
+        return CartManager(userDefaults: testDefaults)
     }
 }
