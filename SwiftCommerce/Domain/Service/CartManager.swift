@@ -18,6 +18,10 @@ final class CartManager: ObservableObject {
         items.removeAll()
     }
 
+    func remove(atOffsets offsets: IndexSet) {
+        items.remove(atOffsets: offsets)
+    }
+
     var totalItems: Int {
         items.count
     }
