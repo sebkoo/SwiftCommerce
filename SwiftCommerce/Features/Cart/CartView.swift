@@ -12,6 +12,8 @@ struct CartView: View {
     @State private var showConfirm = false
     @State private var showSummary = false
     @State private var lastPurchased: [Product] = []
+    @State private var isSubmitting = false
+    @State private var submissionError: String?
 
     var body: some View {
         VStack {
@@ -60,9 +62,7 @@ struct CartView: View {
         .navigationTitle("Cart")
         .alert("Confirm Purchase", isPresented: $showConfirm) {
             Button("Confirm", role: .destructive) {
-                lastPurchased = cart.items
-                cart.clearCart()
-                showSummary = true
+                Task { await submitOrder() }
             }
             Button("Cancel", role: .cancel) { }
         } message: {
@@ -74,6 +74,38 @@ struct CartView: View {
                 totalPrice: lastPurchased.reduce(0) { $0 + $1.price }
             )
         }
+        .overlay {
+            if isSubmitting {
+                ProgressView("Submitting Order...")
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .padding()
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+        }
+        .alert("Submission Error", isPresented: .constant(submissionError != nil)) {
+            Button("OK", role: .cancel) { submissionError = nil }
+        } message: {
+            Text(submissionError ?? "Unknown")
+        }
+    }
+}
+
+extension CartView {
+    private func submitOrder() async {
+        isSubmitting = true
+        submissionError = nil
+        do {
+            let response = try await OrderService.shared.submitOrder(products: cart.items)
+            print("✅ Order submitted: \(response.id)")
+
+            lastPurchased = cart.items
+            cart.clearCart()
+            showSummary = true
+        } catch {
+            submissionError = error.localizedDescription
+        }
+        isSubmitting = false
     }
 }
 
