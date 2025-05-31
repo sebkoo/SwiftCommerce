@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CartView: View {
     @EnvironmentObject var cart: CartManager    // shared instance
+    @State private var showingConfirmation = false
 
     var body: some View {
         VStack {
@@ -33,18 +34,36 @@ struct CartView: View {
             }
 
             if !cart.items.isEmpty {
-                HStack {
-                    Text("Total:")
-                        .fontWeight(.bold)
-                    Spacer()
-                    Text("$\(cart.totalPrice, specifier: "%.2f")")
-                        .font(.title3)
-                        .fontWeight(.bold)
+                VStack(spacing: 12) {
+                    HStack {
+                        Text("Total:")
+                            .fontWeight(.bold)
+                        Spacer()
+                        Text("$\(cart.totalPrice, specifier: "%.2f")")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                    }
+
+                    Button("Checkout") {
+                        showingConfirmation = true
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 4)
                 }
                 .padding()
             }
         }
         .navigationTitle("Cart")
+        .alert("Confirm Purchase", isPresented: $showingConfirmation) {
+            Button("Confirm", role: .destructive) {
+                cart.clearCart()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Are you sure you want to place this order?")
+        }
     }
 }
 
