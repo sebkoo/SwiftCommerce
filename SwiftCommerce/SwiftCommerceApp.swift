@@ -9,16 +9,31 @@ import SwiftUI
 
 @main
 struct SwiftCommerceApp: App {
+    @StateObject var cart = CartManager()
+
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                ProductListView(
-                    viewModel: ProductListViewModel(
-                        service: RealProductService()
-                    ),
-                    cart: CartManager()
-                )
+            TabView {
+                NavigationStack {
+                    ProductListView(
+                        viewModel: ProductListViewModel(
+                            service: RealProductService()
+                        ),
+                        cart: CartManager()
+                    )
+                }
+                .tabItem {
+                    Label("Shop", systemImage: "bag")
+                }
+
+                NavigationStack {
+                    CartView(cart: cart)
+                }
+                .tabItem {
+                    Label("Cart", systemImage: "cart")
+                }
             }
+
         }
     }
 }
