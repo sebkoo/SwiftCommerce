@@ -29,7 +29,11 @@ struct ProductDetailView: View {
                     .font(.title2)
                     .foregroundColor(.secondary)
 
-                Spacer()
+                Button("Add to Cart") {
+                    viewModel.addToCart()
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.top, 20)
             }
             .padding()
         }
@@ -39,13 +43,16 @@ struct ProductDetailView: View {
 }
 
 #Preview {
-    let product = Product(
+    let mockProduct = Product(
         id: UUID(),
         name: "Preview Shoes",
         price: 79.99,
         imageURL: URL(string: "https://example.com/preview.jpg")!
     )
-    let viewModel = ProductDetailViewModel(product: product)
+
+    let mockCart = CartManager()
+    let viewModel = ProductDetailViewModel(product: mockProduct, cart: mockCart)
+
     return NavigationStack {
         ProductDetailView(viewModel: viewModel)
     }

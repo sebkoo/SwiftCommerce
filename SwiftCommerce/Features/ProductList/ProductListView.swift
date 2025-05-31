@@ -9,11 +9,14 @@ import SwiftUI
 
 struct ProductListView: View {
     @StateObject var viewModel: ProductListViewModel
+    var cart: CartManager
 
     var body: some View {
         List(viewModel.products) { product in
             NavigationLink {
-                ProductDetailView(viewModel: ProductDetailViewModel(product: product))
+                ProductDetailView(
+                    viewModel: ProductDetailViewModel(product: product, cart: cart)
+                )
             } label: {
                 VStack(alignment: .leading) {
                     Text(product.name)
@@ -31,7 +34,9 @@ struct ProductListView: View {
 }
 
 #Preview {
+    let mockCart = CartManager()
+
     NavigationStack {
-        ProductListView(viewModel: .previews)
+        ProductListView(viewModel: .previews, cart: mockCart)
     }
 }

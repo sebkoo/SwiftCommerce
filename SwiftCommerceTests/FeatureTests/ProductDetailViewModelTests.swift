@@ -13,11 +13,13 @@ final class ProductDetailViewModelTests: XCTestCase {
     func testInitStoresProduct() {
         let product = Product(
             id: UUID(),
-            name: "Test Detial Product",
+            name: "Test Detail Product",
             price: 99.99,
             imageURL: URL(string: "https://example.com/test.jpg")!
         )
-        let viewModel = ProductDetailViewModel(product: product)
+        let cart = CartManager()
+
+        let viewModel = ProductDetailViewModel(product: product, cart: cart)
 
         XCTAssertEqual(viewModel.product.name, "Test Detail Product")
         XCTAssertEqual(viewModel.product.price, 99.99)

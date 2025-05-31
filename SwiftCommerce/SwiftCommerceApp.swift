@@ -12,7 +12,12 @@ struct SwiftCommerceApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                ProductListView(viewModel: ProductListViewModel(service: RealProductService()))
+                ProductListView(
+                    viewModel: ProductListViewModel(
+                        service: RealProductService()
+                    ),
+                    cart: CartManager()
+                )
             }
         }
     }
