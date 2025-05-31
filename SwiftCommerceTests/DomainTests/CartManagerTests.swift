@@ -18,9 +18,10 @@ final class CartManagerTests: XCTestCase {
             price: 9.99,
             imageURL: URL(string: "https://example.com/image.jpg")!
         )
-
         XCTAssertEqual(cart.totalItems, 0)
+
         cart.addToCart(product)
+
         XCTAssertEqual(cart.totalItems, 1)
         XCTAssertEqual(cart.items.first?.name, "Test Cart Product")
     }
@@ -54,5 +55,16 @@ final class CartManagerTests: XCTestCase {
         cart.remove(atOffsets: IndexSet(integer: 0))
         XCTAssertEqual(cart.totalItems, 1)
         XCTAssertEqual(cart.items.first?.name, "Item 2")
+    }
+
+    func testTotalPriceReflectsAllItems() async {
+        let cart = CartManager()
+        let product1 = Product(id: UUID(), name: "Shoe", price: 50, imageURL: URL(string: "https://1.com")!)
+        let product2 = Product(id: UUID(), name: "Hat",  price: 25, imageURL: URL(string: "https://2.com")!)
+
+        cart.addToCart(product1)
+        cart.addToCart(product2)
+
+        XCTAssertEqual(cart.totalPrice, 75)
     }
 }

@@ -25,4 +25,8 @@ final class CartManager: ObservableObject {
     var totalItems: Int {
         items.count
     }
+
+    var totalPrice: Double {
+        items.reduce(0) { $0 + $1.price }
+    }
 }
