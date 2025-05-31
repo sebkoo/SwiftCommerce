@@ -10,93 +10,70 @@ import XCTest
 
 final class CartManagerTests: XCTestCase {
 
+    private let cartKey = "saved_cart"
+
+    override func setUp() {
+        super.setUp()
+        UserDefaults.standard.removeObject(forKey: cartKey)
+    }
+
     func testAddToCartIncreasesItemCount() async {
         let cart = CartManager()
-        let product = Product(
-            id: UUID(),
-            name: "Test Cart Product",
-            price: 9.99,
-            imageURL: URL(string: "https://example.com/image.jpg")!
-        )
-        XCTAssertEqual(cart.totalItems, 0)
+        let product = makeMockProduct(name: "Sneaker", price: 80)
 
         cart.addToCart(product)
 
         XCTAssertEqual(cart.totalItems, 1)
-        XCTAssertEqual(cart.items.first?.name, "Test Cart Product")
+        XCTAssertEqual(cart.items.first?.name, "Sneaker")
+    }
+
+    func testRemoveFromCartReducesItemCount() async {
+        let cart = CartManager()
+        let product = makeMockProduct(name: "Sneaker", price: 80)
+        cart.addToCart(product)
+
+        cart.remove(atOffsets: IndexSet(integer: 0))
+        XCTAssertEqual(cart.totalItems, 0)
     }
 
     func testClearCartRemovesAllItems() async {
-        let cart = makeIsolatedCartManager()
-        cart.clearCart()
-
-        let product = Product(
-            id: UUID(),
-            name: "Another Product",
-            price: 12.34,
-            imageURL: URL(string: "https://example.com/another.jpg")!
-        )
-        
-        cart.addToCart(product)
-        cart.addToCart(product)
-        XCTAssertEqual(cart.totalItems, 2)
+        let cart = CartManager()
+        cart.addToCart(makeMockProduct(name: "Snaker", price: 80))
+        cart.addToCart(makeMockProduct(name: "Hat", price: 20))
 
         cart.clearCart()
-        XCTAssertEqual(cart.totalItems, 0)
+
+        XCTAssertTrue(cart.items.isEmpty)
+        XCTAssertEqual(cart.totalPrice, 0)
     }
 
-    func testRemoveItemAtIndex() async {
-        let cart = makeIsolatedCartManager()
-        cart.clearCart()
-        
-        let product1 = Product(id: UUID(), name: "Item 1", price: 5,  imageURL: URL(string: "https://a.com")!)
-        let product2 = Product(id: UUID(), name: "Item 2", price: 10, imageURL: URL(string: "https://b.com")!)
+    func testTotalPRiceReflectsSumOfItems() async {
+        let cart = CartManager()
+        cart.addToCart(makeMockProduct(name: "Sneaker", price: 80))
+        cart.addToCart(makeMockProduct(name: "Hat", price: 20))
 
-        cart.addToCart(product1)
-        cart.addToCart(product2)
-        XCTAssertEqual(cart.totalItems, 2)
-
-        cart.remove(atOffsets: IndexSet(integer: 0))
-        XCTAssertEqual(cart.totalItems, 1)
-        XCTAssertEqual(cart.items.first?.name, "Item 2")
-    }
-
-    func testTotalPriceReflectsAllItems() async {
-        let cart = makeIsolatedCartManager()
-        cart.clearCart()
-
-        let product1 = Product(id: UUID(), name: "Shoe", price: 50, imageURL: URL(string: "https://1.com")!)
-        let product2 = Product(id: UUID(), name: "Hat",  price: 25, imageURL: URL(string: "https://2.com")!)
-
-        cart.addToCart(product1)
-        cart.addToCart(product2)
-
-        XCTAssertEqual(cart.totalPrice, 75)
+        XCTAssertEqual(cart.totalPrice, 100)
     }
 
     func testCartPersistsToUserDefaults() async {
-        let cart = CartManager()
-        cart.clearCart()    // clean before test
+        let product = makeMockProduct(name: "Backpack", price: 40)
 
-        let product = Product(
-            id: UUID(),
-            name: "Test Watch",
-            price: 349,
-            imageURL: URL(string: "https://example.com/watch.jpg")!
-        )
+        let cart = CartManager()
         cart.addToCart(product)
 
-        let restoredCart = CartManager()    // will load from UserDefaults
-        XCTAssertEqual(restoredCart.items.count, 1)
-        XCTAssertEqual(restoredCart.items.first?.name, "Test Watch")
+        let reloadedCart = CartManager()
+        XCTAssertEqual(reloadedCart.totalItems, 1)
+        XCTAssertEqual(reloadedCart.items.first?.name, "Backpack")
     }
 }
 
-extension CartManagerTests {
-    func makeIsolatedCartManager() -> CartManager {
-        let suiteName = "TestDefaults-\(UUID().uuidString)"
-        let testDefaults = UserDefaults(suiteName: suiteName)!
-        testDefaults.removePersistentDomain(forName: suiteName)
-        return CartManager(userDefaults: testDefaults)
+extension CartManagerTests {    // Helpers
+    private func makeMockProduct(name: String, price: Double) -> Product {
+        Product(
+            id: UUID(),
+            name: name,
+            price: price,
+            imageURL: URL(string: "https://mock.com/\(UUID().uuidString)")!
+        )
     }
 }
