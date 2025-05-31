@@ -11,7 +11,9 @@ import SwiftUI
 struct SwiftCommerceApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                ProductListView(viewModel: ProductListViewModel(service: RealProductService()))
+            }
         }
     }
 }
