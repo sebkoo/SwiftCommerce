@@ -9,8 +9,14 @@ import Foundation
 
 final class ProductDetailViewModel: ObservableObject {
     let product: Product
+    let cart: CartManager
 
-    init(product: Product) {
+    init(product: Product, cart: CartManager) {
         self.product = product
+        self.cart = cart
+    }
+
+    func addToCart() {
+        cart.addToCart(product)
     }
 }
