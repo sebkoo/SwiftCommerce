@@ -21,7 +21,7 @@ struct ProductListView: View {
                 VStack(alignment: .leading) {
                     Text(product.name)
                         .font(.headline)
-                    Text("$\(product.price, specifier: "%.2f")")
+                    Text(FormattedPrice.shared.string(from: product.price))
                         .font(.subheadline)
                 }
             }

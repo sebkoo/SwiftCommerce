@@ -23,7 +23,7 @@ struct OrderSummaryView: View {
                 HStack {
                     Text(item.name)
                     Spacer()
-                    Text("$\(item.price, specifier: "%.2f")")
+                    Text(FormattedPrice.shared.string(from: item.price))
                         .foregroundColor(.secondary)
                 }
             }
@@ -32,7 +32,7 @@ struct OrderSummaryView: View {
                 Text("Total:")
                     .fontWeight(.bold)
                 Spacer()
-                Text("$\(totalPrice, specifier: "%.2f")")
+                Text(FormattedPrice.shared.string(from: totalPrice))
                     .font(.title3)
                     .fontWeight(.bold)
             }

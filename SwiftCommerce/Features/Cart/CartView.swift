@@ -20,7 +20,7 @@ struct CartView: View {
                     HStack {
                         Text(product.name)
                         Spacer()
-                        Text("$\(product.price, specifier: "%.2f")")
+                        Text(FormattedPrice.shared.string(from: product.price))
                             .foregroundColor(.secondary)
                     }
                 }
@@ -41,7 +41,7 @@ struct CartView: View {
                         Text("Total:")
                             .fontWeight(.bold)
                         Spacer()
-                        Text("$\(cart.totalPrice, specifier: "%.2f")")
+                        Text(FormattedPrice.shared.string(from: cart.totalPrice))
                             .font(.title3)
                             .fontWeight(.bold)
                     }
