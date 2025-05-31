@@ -12,11 +12,15 @@ struct ProductListView: View {
 
     var body: some View {
         List(viewModel.products) { product in
-            VStack(alignment: .leading) {
-                Text(product.name)
-                    .font(.headline)
-                Text("$\(product.price, specifier: "%.2f")")
-                    .font(.subheadline)
+            NavigationLink {
+                ProductDetailView(viewModel: ProductDetailViewModel(product: product))
+            } label: {
+                VStack(alignment: .leading) {
+                    Text(product.name)
+                        .font(.headline)
+                    Text("$\(product.price, specifier: "%.2f")")
+                        .font(.subheadline)
+                }
             }
         }
         .task {
