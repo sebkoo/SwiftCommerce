@@ -13,19 +13,27 @@ final class CartManager: ObservableObject {
     }
 
     private let cartKey = "saved_cart"
+    private let userDefaults: UserDefaults
 
-    init() { loadCart() }
+    init(userDefaults: UserDefaults = .standard) {
+        self.userDefaults = userDefaults
+        loadCart()
+    }
 
-    func addToCart(_ product: Product) {
+    func add(_ product: Product) {
         items.append(product)
     }
 
-    func clearCart() {
-        items.removeAll()
+    func remove(_ product: Product) {
+        items.removeAll { $0.id == product.id }
     }
 
     func remove(atOffsets offsets: IndexSet) {
         items.remove(atOffsets: offsets)
+    }
+
+    func clear() {
+        items.removeAll()
     }
 
     var totalItems: Int {

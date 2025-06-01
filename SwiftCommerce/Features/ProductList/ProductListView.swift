@@ -18,11 +18,16 @@ struct ProductListView: View {
                     viewModel: ProductDetailViewModel(product: product, cart: cart)
                 )
             } label: {
-                VStack(alignment: .leading) {
-                    Text(product.name)
-                        .font(.headline)
-                    Text(FormattedPrice.shared.string(from: product.price))
-                        .font(.subheadline)
+                HStack {
+                    ProductThumbnailView(url: product.imageURL)
+                    VStack(alignment: .leading) {
+                        Text(product.name)
+                            .font(.headline)
+                        Text(FormattedPrice.shared.string(from: product.price))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
                 }
             }
         }
@@ -52,7 +57,7 @@ struct ProductListView: View {
         )
         .environmentObject({
             let mockCart = CartManager()
-            mockCart.addToCart(Product(
+            mockCart.add(Product(
                 id: UUID(),
                 name: "AirPods Max",
                 price: 549,

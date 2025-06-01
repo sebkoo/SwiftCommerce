@@ -21,6 +21,7 @@ struct OrderSummaryView: View {
 
             List(items) { item in
                 HStack {
+                    ProductThumbnailView(url: item.imageURL)
                     Text(item.name)
                     Spacer()
                     Text(FormattedPrice.shared.string(from: item.price))
