@@ -12,30 +12,49 @@ struct ProductDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 16) {
-                AsyncImage(url: viewModel.product.imageURL) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
+            VStack(spacing: 20) {
+                AsyncImage(url: viewModel.product.imageURL) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .frame(height: 300)
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 300)
+                            .cornerRadius(16)
+                            .accessibilityLabel(viewModel.product.name)
+                    case .failure:
+                        Image(systemName: "photo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 300)
+                            .foregroundColor(.gray)
+                    @unknown default:
+                        EmptyView()
+                    }
                 }
-                .frame(height: 300)
-                .cornerRadius(16)
 
-                Text(viewModel.product.name)
-                    .font(.title)
-                    .fontWeight(.bold)
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(viewModel.product.name)
+                        .font(.title)
+                        .fontWeight(.bold)
 
-                Text(String(format: "$%.2f", viewModel.product.price))
-                    .font(.title2)
-                    .foregroundColor(.secondary)
+                    Text(String(format: "$%.2f", viewModel.product.price))
+                        .font(.title2)
+                        .foregroundColor(.secondary)
 
-                Button("Add to Cart") {
-                    viewModel.addToCart()
+                    Button("Add to Cart") {
+                        viewModel.addToCart()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .accessibilityLabel("Add \(viewModel.product.name) to cart")
                 }
-                .buttonStyle(.borderedProminent)
-                .padding(.top, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
             }
-            .padding()
+            .padding(.top)
         }
         .navigationTitle("Details")
         .navigationBarTitleDisplayMode(.inline)
@@ -45,9 +64,9 @@ struct ProductDetailView: View {
 #Preview {
     let mockProduct = Product(
         id: UUID(),
-        name: "Preview Shoes",
+        name: "Running Shoes",
         price: 79.99,
-        imageURL: URL(string: "https://example.com/preview.jpg")!
+        imageURL: URL(string: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg")!
     )
 
     let mockCart = CartManager()
