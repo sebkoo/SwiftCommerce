@@ -21,7 +21,7 @@ final class CartManagerTests: XCTestCase {
         let cart = CartManager()
         let product = makeMockProduct(name: "Sneaker", price: 80)
 
-        cart.addToCart(product)
+        cart.add(product)
 
         XCTAssertEqual(cart.totalItems, 1)
         XCTAssertEqual(cart.items.first?.name, "Sneaker")
@@ -30,7 +30,7 @@ final class CartManagerTests: XCTestCase {
     func testRemoveFromCartReducesItemCount() async {
         let cart = CartManager()
         let product = makeMockProduct(name: "Sneaker", price: 80)
-        cart.addToCart(product)
+        cart.add(product)
 
         cart.remove(atOffsets: IndexSet(integer: 0))
         XCTAssertEqual(cart.totalItems, 0)
@@ -38,10 +38,10 @@ final class CartManagerTests: XCTestCase {
 
     func testClearCartRemovesAllItems() async {
         let cart = CartManager()
-        cart.addToCart(makeMockProduct(name: "Snaker", price: 80))
-        cart.addToCart(makeMockProduct(name: "Hat", price: 20))
+        cart.add(makeMockProduct(name: "Snaker", price: 80))
+        cart.add(makeMockProduct(name: "Hat", price: 20))
 
-        cart.clearCart()
+        cart.clear()
 
         XCTAssertTrue(cart.items.isEmpty)
         XCTAssertEqual(cart.totalPrice, 0)
@@ -49,8 +49,8 @@ final class CartManagerTests: XCTestCase {
 
     func testTotalPRiceReflectsSumOfItems() async {
         let cart = CartManager()
-        cart.addToCart(makeMockProduct(name: "Sneaker", price: 80))
-        cart.addToCart(makeMockProduct(name: "Hat", price: 20))
+        cart.add(makeMockProduct(name: "Sneaker", price: 80))
+        cart.add(makeMockProduct(name: "Hat", price: 20))
 
         XCTAssertEqual(cart.totalPrice, 100)
     }
@@ -59,7 +59,7 @@ final class CartManagerTests: XCTestCase {
         let product = makeMockProduct(name: "Backpack", price: 40)
 
         let cart = CartManager()
-        cart.addToCart(product)
+        cart.add(product)
 
         let reloadedCart = CartManager()
         XCTAssertEqual(reloadedCart.totalItems, 1)
@@ -67,7 +67,7 @@ final class CartManagerTests: XCTestCase {
     }
 }
 
-extension CartManagerTests {    // Helpers
+private extension CartManagerTests {    // Helpers
     private func makeMockProduct(name: String, price: Double) -> Product {
         Product(
             id: UUID(),
