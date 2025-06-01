@@ -9,28 +9,43 @@ import SwiftUI
 
 struct OrderHistoryView: View {
     @State private var history: [[Product]] = []
+    @State private var searchText: String = ""
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(history.indices, id: \.self) { index in
-                    Section("Order #\(index + 1)") {
-                        ForEach(history[index]) { item in
-                            HStack {
-                                ProductThumbnailView(url: item.imageURL)
-                                Text(item.name)
-                                Spacer()
-                                Text(FormattedPrice.shared.string(from: item.price))
+                ForEach(filteredHistory.indices, id: \.self) { index in
+                    let order = filteredHistory[index]
+                    if !order.isEmpty {
+                        Section("Order #\(index + 1)") {
+                            ForEach(order) { item in
+                                HStack {
+                                    ProductThumbnailView(url: item.imageURL)
+                                    Text(item.name)
+                                    Spacer()
+                                    Text(FormattedPrice.shared.string(from: item.price))
+                                }
                             }
                         }
                     }
                 }
             }
             .navigationTitle("Order History")
+            .searchable(text: $searchText, prompt: "Search by product name")
             .onAppear {
                 history = OrderHistoryService.shared.loadHistory()
             }
         }
+    }
+
+    private var filteredHistory: [[Product]] {
+        if searchText.isEmpty {
+            return history
+        }
+
+        return history.map { order in
+            order.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        }.filter { !$0.isEmpty }
     }
 }
 
@@ -47,40 +62,3 @@ struct OrderHistoryView: View {
 
     return OrderHistoryView()
 }
-
-/*
-
- Unit Tests for CartView (ViewModel or UI layer with ViewInspector)
-
- 💵 Promo Code or Discount Calculation
-
- 🧪 Unit/UI Testing for CartView
-
- 🛠 Fake Order Submission to Network Service
-
- 🧪 Snapshot or UI test of OrderSummaryView
-
- 🛠 Fake server request for order submission
-
- 🧹 Add a TabView “Orders” history (for realism)
-
- 🔄 Simulate order submission to server (with async/await delay)
-
- 🧪 Snapshot/UI tests for OrderSummaryView
-
- 🖼 Add AsyncImage for product thumbnails
-
- 📜 Order History Tab
-
- 🧹 Accessibility improvements (VoiceOver labels)
-
- ✅ Add App Icon + Launch Screen
-
- ✅ Display mock order ID in OrderSummaryView
-
- 🧢 Add ProductDetailView image & polish
-
- 📲 Add App Icon + Launch Screen
-
- 🧠 Add Accessibility & VoiceOver Labels
- */
