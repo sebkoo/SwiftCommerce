@@ -15,7 +15,7 @@ struct HomeView: View {
             NavigationStack {
                 ProductListView(
                     viewModel: ProductListViewModel(
-                        service: RealProductService()
+                        service: ProductServiceAPI()
                     )
                 )
             }

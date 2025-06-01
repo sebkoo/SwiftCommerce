@@ -63,7 +63,7 @@ struct ProductDetailView: View {
 
 #Preview {
     let mockProduct = Product(
-        id: UUID(),
+        id: 1,
         name: "Running Shoes",
         price: 79.99,
         imageURL: URL(string: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg")!

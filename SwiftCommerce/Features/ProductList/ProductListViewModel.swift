@@ -10,10 +10,11 @@ import Foundation
 @MainActor
 final class ProductListViewModel: ObservableObject {
     @Published var products: [Product] = []
+    @Published var searchText: String = ""
 
-    private let service: ProductService
+    private let service: ProductServiceAPI
 
-    init(service: ProductService) {
+    init(service: ProductServiceAPI) {
         self.service = service
     }
 
@@ -24,11 +25,16 @@ final class ProductListViewModel: ObservableObject {
             print("Failed to fetch: \(error)")
         }
     }
+
+    var filteredProducts: [Product] {
+        guard !searchText.isEmpty else { return products }
+        return products.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+    }
 }
 
 extension ProductListViewModel {
     static var previews: ProductListViewModel {
-        let viewModel = ProductListViewModel(service: MockProductService())
+        let viewModel = ProductListViewModel(service: ProductServiceAPI())
         Task {
             await viewModel.fetchProducts()
         }

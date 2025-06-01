@@ -53,8 +53,8 @@ struct OrderHistoryView: View {
     // Set mock history in UserDefaults for preview
     @MainActor in
     let mockProducts = [
-        Product(id: UUID(), name: "Mock Hat", price: 10.0, imageURL: URL(string: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg")!),
-        Product(id: UUID(), name: "Mock Shirt", price: 20.0, imageURL: URL(string: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg")!)
+        Product(id: 1, name: "Mock Hat", price: 10.0, imageURL: URL(string: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg")!),
+        Product(id: 2, name: "Mock Shirt", price: 20.0, imageURL: URL(string: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg")!)
     ]
 
     OrderHistoryService.shared.clearHistory()

@@ -31,7 +31,7 @@ struct CartItemRow: View {
 #Preview(traits: .sizeThatFitsLayout) {
     CartItemRow(
         product: Product(
-            id: UUID(),
+            id: 1,
             name: "Sample Backpack",
             price: 59.99,
             imageURL: URL(string: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg")!

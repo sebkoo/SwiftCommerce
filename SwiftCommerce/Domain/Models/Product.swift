@@ -8,8 +8,15 @@
 import Foundation
 
 struct Product: Identifiable, Equatable, Codable, Hashable {
-    let id: UUID
+    let id: Int
     let name: String
     let price: Double
     let imageURL: URL
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name = "title"
+        case price
+        case imageURL = "image"
+    }
 }
