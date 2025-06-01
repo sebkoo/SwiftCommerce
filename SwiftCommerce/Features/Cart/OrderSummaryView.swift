@@ -47,8 +47,8 @@ struct OrderSummaryView: View {
 
 #Preview {
     let sampleItems: [Product] = [
-        Product(id: UUID(), name: "Bag", price: 45.0, imageURL: URL(string: "https://bag.com")!),
-        Product(id: UUID(), name: "Cap", price: 25.0, imageURL: URL(string: "https://cap.com")!)
+        Product(id: 1, name: "Bag", price: 45.0, imageURL: URL(string: "https://bag.com")!),
+        Product(id: 2, name: "Cap", price: 25.0, imageURL: URL(string: "https://cap.com")!)
     ]
     return NavigationStack {
         OrderSummaryView(items: sampleItems, totalPrice: 70.0)

@@ -134,7 +134,7 @@ private extension CartView {
                 let mockCart = CartManager()
                 mockCart.clear()
                 mockCart.add(Product(
-                    id: UUID(),
+                    id: 1,
                     name: "Preview Hat",
                     price: 29.99,
                     imageURL: URL(string: "https://example.com/hat.jpg")!
