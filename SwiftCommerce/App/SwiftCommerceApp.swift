@@ -13,32 +13,7 @@ struct SwiftCommerceApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TabView {
-                NavigationStack {
-                    ProductListView(
-                        viewModel: ProductListViewModel(
-                            service: RealProductService()
-                        )
-                    )
-                }
-                .tabItem {
-                    Label("Shop", systemImage: "bag")
-                }
-
-                NavigationStack {
-                    CartView()
-                }
-                .tabItem {
-                    Label("Cart", systemImage: "cart")
-                }
-                .badge(cart.totalItems)
-
-                OrderHistoryView()
-                    .tabItem {
-                        Label("History", systemImage: "clock.arrow.circlepath")
-                    }
-            }
-            .environmentObject(cart)    // Make CartManager globally accessible
+            HomeView()
         }
     }
 }
