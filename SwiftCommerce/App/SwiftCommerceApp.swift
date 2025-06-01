@@ -32,6 +32,11 @@ struct SwiftCommerceApp: App {
                     Label("Cart", systemImage: "cart")
                 }
                 .badge(cart.totalItems)
+
+                OrderHistoryView()
+                    .tabItem {
+                        Label("History", systemImage: "clock.arrow.circlepath")
+                    }
             }
             .environmentObject(cart)    // Make CartManager globally accessible
         }

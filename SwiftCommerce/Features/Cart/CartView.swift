@@ -112,12 +112,18 @@ private extension CartView {
         do {
             let response = try await OrderService.shared.submitOrder(products: cart.items)
             print("✅ Order submitted: \(response.id)")
+
+            // Save to local order history
+            OrderHistoryService.shared.save(order: cart.items)
+
             lastPurchased = cart.items
             cart.clear()
             showSummary = true
         } catch {
             submissionError = error.localizedDescription
         }
+
+        isSubmitting = false
     }
 }
 
